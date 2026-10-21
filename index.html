@@ -86,6 +86,10 @@
   .opt.wrong .mark { border-color: var(--bad); background: var(--bad); color: #fff; }
   .opt.dim { opacity: .55; }
 
+  .nav { display: flex; gap: 10px; align-items: center; }
+  .nav .btn { margin: 0; }
+  .nav .btn.small { width: auto; flex: 0 0 auto; padding: 13px 16px; font-size: 15px; }
+  .nav .hint { margin: 0; font-size: 13px; }
   .verdict { font-weight: 800; font-size: 18px; margin: 0 0 6px; }
   .verdict.ok { color: var(--ok); }
   .verdict.bad { color: var(--bad); }
@@ -181,7 +185,9 @@ const TIERS = [
 const app = document.getElementById("app");
 let state;
 
-function reset() { state = { i: 0, correct: 0, picked: null }; renderStart(); }
+function reset() { state = { answers: Array(QUESTIONS.length).fill(null) }; renderStart(); }
+function correctCount() { return state.answers.filter((a, k) => a !== null && a === QUESTIONS[k].answer).length; }
+function firstUnanswered() { const k = state.answers.indexOf(null); return k === -1 ? QUESTIONS.length : k; }
 
 function el(html) { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
 
@@ -194,61 +200,79 @@ function renderStart() {
       <p class="muted">${QUESTIONS.length} questions. Tap an answer and it locks, so think first. At the end you get your result in percent.</p>
       <button class="btn" id="start">Start</button>
     </section>`);
-  card.querySelector("#start").addEventListener("click", () => { renderQuestion(); });
+  card.querySelector("#start").addEventListener("click", () => renderQuestion(0));
   app.appendChild(card);
 }
 
-function renderQuestion() {
-  const n = state.i, q = QUESTIONS[n];
+function renderQuestion(n) {
+  const q = QUESTIONS[n], picked = state.answers[n], answered = picked !== null;
+  const reviewing = answered && n < firstUnanswered() - 1 || (answered && firstUnanswered() === QUESTIONS.length);
   app.innerHTML = "";
   const card = el(`
     <section class="card">
-      <div class="progress"><span>Question ${n + 1} of ${QUESTIONS.length}</span><span>${state.correct} correct</span></div>
+      <div class="progress"><span>Question ${n + 1} of ${QUESTIONS.length}${reviewing ? " · answered" : ""}</span><span>${correctCount()} correct</span></div>
       <div class="bar"><div style="width:${(n / QUESTIONS.length) * 100}%"></div></div>
       <h2>${q.q}</h2>
       <div class="opts" role="group" aria-label="Answers"></div>
       <div id="feedback"></div>
+      <div class="nav" id="nav"></div>
     </section>`);
   const opts = card.querySelector(".opts");
   q.options.forEach((text, idx) => {
     const b = el(`<button class="opt" data-idx="${idx}"><span class="mark" aria-hidden="true">✓</span><span>${text}</span></button>`);
-    b.addEventListener("click", () => pick(idx, card));
+    b.addEventListener("click", () => pick(n, idx, card));
     opts.appendChild(b);
   });
   app.appendChild(card);
+  if (answered) showLocked(n, card); else renderNav(n, card);
   window.scrollTo({ top: 0 });
 }
 
-function pick(idx, card) {
-  if (state.picked !== null) return;
-  state.picked = idx;
-  const q = QUESTIONS[state.i];
-  const ok = idx === q.answer;
-  if (ok) state.correct++;
+function pick(n, idx, card) {
+  if (state.answers[n] !== null) return;
+  state.answers[n] = idx;
+  showLocked(n, card);
+  const next = card.querySelector("#next");
+  if (next) next.focus();
+}
+
+function showLocked(n, card) {
+  const q = QUESTIONS[n], picked = state.answers[n], ok = picked === q.answer;
   card.querySelectorAll(".opt").forEach(b => {
     const i = Number(b.dataset.idx);
     b.disabled = true;
     if (i === q.answer) { b.classList.add("correct"); b.querySelector(".mark").textContent = "✓"; }
-    else if (i === idx) { b.classList.add("wrong"); b.querySelector(".mark").textContent = "✕"; }
+    else if (i === picked) { b.classList.add("wrong"); b.querySelector(".mark").textContent = "✕"; }
     else b.classList.add("dim");
   });
-  card.querySelector(".progress span:last-child").textContent = `${state.correct} correct`;
-  const last = state.i === QUESTIONS.length - 1;
-  const fb = card.querySelector("#feedback");
-  fb.innerHTML = `
+  card.querySelector(".progress span:last-child").textContent = `${correctCount()} correct`;
+  card.querySelector("#feedback").innerHTML = `
     <p class="verdict ${ok ? "ok" : "bad"}">${ok ? "Correct!" : "Not quite."}</p>
-    <p class="note">${q.note}</p>
-    <button class="btn" id="next">${last ? "See my result" : "Next question"}</button>`;
-  const next = fb.querySelector("#next");
-  next.addEventListener("click", () => {
-    state.i++; state.picked = null;
-    if (state.i >= QUESTIONS.length) renderResult(); else renderQuestion();
-  });
-  next.focus();
+    <p class="note">${q.note}</p>`;
+  renderNav(n, card);
+}
+
+function renderNav(n, card) {
+  const nav = card.querySelector("#nav");
+  const answered = state.answers[n] !== null;
+  const last = n === QUESTIONS.length - 1;
+  nav.innerHTML = "";
+  if (n > 0) {
+    const back = el(`<button class="btn secondary small" id="back" aria-label="Back to previous question">← Back</button>`);
+    back.addEventListener("click", () => renderQuestion(n - 1));
+    nav.appendChild(back);
+  }
+  if (answered) {
+    const next = el(`<button class="btn" id="next">${last ? "See my result" : "Next"}</button>`);
+    next.addEventListener("click", () => { if (last) renderResult(); else renderQuestion(n + 1); });
+    nav.appendChild(next);
+  } else if (n > 0) {
+    nav.appendChild(el(`<p class="muted hint">Earlier answers can be viewed but not changed.</p>`));
+  }
 }
 
 function renderResult() {
-  const total = QUESTIONS.length, c = state.correct;
+  const total = QUESTIONS.length, c = correctCount();
   const pct = Math.round((c / total) * 100);
   const tier = TIERS.find(t => c >= t.min).label;
   const r = 70, circ = 2 * Math.PI * r, dash = circ * (c / total);
@@ -266,8 +290,10 @@ function renderResult() {
       <p class="count">${c} of ${total} correct</p>
       <p class="tier">${tier}</p>
       <button class="btn" id="again">Start over</button>
+      <button class="btn secondary" id="review">Review my answers</button>
     </section>`);
   card.querySelector("#again").addEventListener("click", reset);
+  card.querySelector("#review").addEventListener("click", () => renderQuestion(0));
   app.appendChild(card);
   window.scrollTo({ top: 0 });
 }
