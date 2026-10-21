@@ -132,6 +132,33 @@
   .ring .track { stroke: var(--line); }
   .ring .arc { stroke: var(--yellow); }
   .ring text { fill: var(--blue-text); font-family: inherit; }
+  /* endings */
+  .confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+  .shower { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+  .shower span { position: absolute; top: -70px; line-height: 1; animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; }
+  @keyframes fall { to { transform: translateY(115vh) translateX(var(--sway, 0px)) rotate(380deg); } }
+  .card.score { position: relative; overflow: hidden; }
+  .stamp {
+    position: absolute; left: 50%; top: 158px; transform: translate(-50%, -50%) rotate(-10deg);
+    background: var(--yellow); color: var(--blue); border: 4px solid var(--blue); border-radius: 10px;
+    padding: 6px 18px; font-weight: 900; font-size: clamp(26px, 9vw, 42px); letter-spacing: .08em; text-transform: uppercase;
+    white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    animation: stamp .55s cubic-bezier(.2, 1.5, .4, 1) both;
+  }
+  @keyframes stamp { from { transform: translate(-50%, -50%) rotate(-10deg) scale(3); opacity: 0; } to { transform: translate(-50%, -50%) rotate(-10deg) scale(1); opacity: 1; } }
+  .varenyk { width: 260px; max-width: 100%; height: auto; margin: 0 auto 4px; display: block; }
+  .varenyk .plate { fill: var(--paper); stroke: var(--blue); }
+  .varenyk .rim { fill: none; stroke: var(--line); }
+  .caption { font-size: 15px; color: var(--muted); margin: -10px 0 18px; }
+  /* temporary preview of endings */
+  .preview { margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .preview h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 12px; border-radius: 999px; border: 2px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+  .chip:hover { border-color: var(--blue-text); }
+  .chip.on { border-color: var(--blue); background: var(--blue); color: #fff; }
+  .demo { justify-content: center; margin: 14px 0 0; }
+  @media (prefers-reduced-motion: reduce) { .stamp, .shower span { animation: none; } }
   footer {
     text-align: center; font-size: 12px; color: var(--muted);
     padding-block: 10px 18px;
@@ -162,9 +189,9 @@ const QUESTIONS = [
     note: "The hryvnia, ₴. Named after a unit of weight used in Kyivan Rus a thousand years ago." },
   { q: "What is a vyshyvanka?",
     options: ["A soup", "A dance", "A fur hat", "An embroidered shirt"], answer: 3,
-    note: "The embroidered shirt. Every region has its own pattern, and there is a Vyshyvanka Day every May." },
+    note: "The embroidered shirt. Every region has its own pattern, and Vyshyvanka Day is the third Thursday of May." },
   { q: "When was Ukraine's capital, Kyiv, founded?",
-    options: ["330", "482", "988", "1240"], answer: 1,
+    options: ["482", "988", "1240", "1654"], answer: 0,
     note: "Officially 482, so Kyiv celebrated its 1,500th birthday in 1982." },
   { q: "True or false: Swedes founded a village in Ukraine in 1782, and a few people there still speak old Swedish.",
     options: ["True", "False"], answer: 0,
@@ -254,8 +281,18 @@ function renderStart() {
       <h1>How Ukrainian are you?</h1>
       <p class="muted">${QUESTIONS.length} questions. Tap an answer and it locks, so think first. At the end you get your result in percent.</p>
       <button class="btn" id="start">Start</button>
+      <div class="preview">
+        <h3>Preview endings · temporary</h3>
+        <div class="row" id="endings"></div>
+      </div>
     </section>`);
   card.querySelector("#start").addEventListener("click", () => renderQuestion(0));
+  const row = card.querySelector("#endings");
+  [["confetti", "1 · Confetti"], ["sunflowers", "2 · Sunflower shower"], ["varenyk", "3 · Varenyk verdict"], ["stamp", "4 · Budmo stamp"]].forEach(([key, label]) => {
+    const b = el(`<button class="chip" type="button">${label}</button>`);
+    b.addEventListener("click", () => renderResult({ effect: key, demo: 17 }));
+    row.appendChild(b);
+  });
   app.appendChild(card);
 }
 
@@ -327,12 +364,97 @@ function renderNav(n, card) {
   }
 }
 
-function renderResult() {
-  const total = QUESTIONS.length, c = correctCount();
+const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const EFFECTS = {
+  confetti(card, c, total) {
+    if (reducedMotion()) return;
+    const cv = document.createElement("canvas"); cv.className = "confetti"; document.body.appendChild(cv);
+    const ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+    const colors = ["#0057B7", "#FFD700", "#ffffff", "#7fb3ff", "#ffe866"];
+    const n = Math.round(40 + 240 * (c / total)), ps = [];
+    const ox = innerWidth / 2, oy = Math.min(innerHeight * 0.35, 320);
+    for (let i = 0; i < n; i++) {
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.3, sp = 7 + Math.random() * 11;
+      ps.push({ x: ox, y: oy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, w: 6 + Math.random() * 6, h: 9 + Math.random() * 9,
+        r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, col: colors[i % colors.length] });
+    }
+    const t0 = performance.now(); let last = t0;
+    function frame(now) {
+      const dt = Math.min((now - last) / 16.7, 2); last = now;
+      const age = now - t0, fade = Math.max(0, 1 - Math.max(0, age - 2600) / 900);
+      ctx.clearRect(0, 0, cv.width, cv.height); ctx.globalAlpha = fade;
+      for (const p of ps) {
+        p.vy += 0.28 * dt; p.vx *= 0.99; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt;
+        ctx.save(); ctx.translate(p.x * dpr, p.y * dpr); ctx.rotate(p.r); ctx.fillStyle = p.col;
+        ctx.fillRect(-p.w / 2 * dpr, -p.h / 2 * dpr, p.w * dpr, p.h * dpr); ctx.restore();
+      }
+      if (age < 3600) requestAnimationFrame(frame); else cv.remove();
+    }
+    requestAnimationFrame(frame);
+  },
+  sunflowers(card, c, total) {
+    if (reducedMotion()) return;
+    const layer = document.createElement("div"); layer.className = "shower"; document.body.appendChild(layer);
+    const n = c <= 7 ? 3 : Math.round(10 + 30 * (c / total));
+    for (let i = 0; i < n; i++) {
+      const f = document.createElement("span"); f.textContent = "🌻";
+      f.style.left = Math.random() * 96 + "vw";
+      f.style.fontSize = (22 + Math.random() * 28) + "px";
+      f.style.setProperty("--sway", (Math.random() * 160 - 80).toFixed(0) + "px");
+      f.style.animationDuration = (3.5 + Math.random() * 3) + "s";
+      f.style.animationDelay = (Math.random() * 2) + "s";
+      layer.appendChild(f);
+    }
+    setTimeout(() => layer.remove(), 9000);
+  },
+  varenyk(card, c, total) {
+    const mood = c >= 18 ? "happy" : c >= 8 ? "neutral" : "sad";
+    const crimp = [];
+    for (let k = 0; k <= 10; k++) {
+      const a = Math.PI - Math.PI * k / 10;
+      crimp.push(`<circle cx="${(130 + 90 * Math.cos(a)).toFixed(1)}" cy="${(125 - 90 * Math.sin(a)).toFixed(1)}" r="7" fill="#f2dca3" stroke="#c79a3b" stroke-width="3"/>`);
+    }
+    const face = mood === "happy"
+      ? `<path d="M96 88 q10 -12 20 0"/><path d="M144 88 q10 -12 20 0"/><path d="M108 102 q22 22 44 0"/>
+         <circle cx="88" cy="100" r="6" fill="#f4a7a3" stroke="none" opacity=".8"/><circle cx="172" cy="100" r="6" fill="#f4a7a3" stroke="none" opacity=".8"/>`
+      : mood === "neutral"
+      ? `<circle cx="106" cy="86" r="4.5" fill="#3a2a10" stroke="none"/><circle cx="154" cy="86" r="4.5" fill="#3a2a10" stroke="none"/><path d="M114 106 h32"/>`
+      : `<circle cx="106" cy="86" r="4.5" fill="#3a2a10" stroke="none"/><circle cx="154" cy="86" r="4.5" fill="#3a2a10" stroke="none"/><path d="M112 110 q18 -14 36 0"/>
+         <path d="M160 94 q7 11 0 16 q-7 -5 0 -16z" fill="#7fb3ff" stroke="none"/>`;
+    const cream = mood === "happy"
+      ? `<path d="M98 52 q32 -34 64 0 q-8 16 -32 12 q-24 6 -32 -12z" fill="#ffffff" stroke="#d9d9d9" stroke-width="2"/>
+         <path d="M118 44 l-6 -10 M127 40 l-2 -12 M137 41 l5 -12" fill="none" stroke="#5aa64a" stroke-width="2.5" stroke-linecap="round"/>` : "";
+    const caption = mood === "happy" ? "The varenyk approves." : mood === "neutral" ? "The varenyk is thinking about it." : "The varenyk is sad. More borsch.";
+    const svg = el(`<svg class="varenyk" viewBox="0 0 260 170" aria-hidden="true">
+      <ellipse class="plate" cx="130" cy="136" rx="120" ry="26" stroke-width="3"/>
+      <ellipse class="rim" cx="130" cy="136" rx="98" ry="17" stroke-width="2"/>
+      <path d="M40 125 A90 90 0 0 1 220 125 Z" fill="#f2dca3" stroke="#c79a3b" stroke-width="3"/>
+      ${crimp.join("")}${cream}
+      <g fill="none" stroke="#3a2a10" stroke-width="3.5" stroke-linecap="round">${face}</g>
+    </svg>`);
+    const ring = card.querySelector(".ring"); if (ring) ring.remove();
+    card.querySelector(".tag").insertAdjacentElement("afterend", svg);
+    card.querySelector(".tier").insertAdjacentHTML("afterend", `<p class="caption">${caption}</p>`);
+  },
+  stamp(card, c, total) {
+    const word = c >= 18 ? "Budmo!" : c >= 14 ? "Smachnoho!" : c >= 8 ? "Normalno" : "More borsch";
+    card.insertAdjacentHTML("beforeend", `<div class="stamp" aria-hidden="true">${word}</div>`);
+  },
+};
+
+const FINAL_EFFECT = null; // the chosen ending goes here once picked
+
+function renderResult(opts = {}) {
+  const total = QUESTIONS.length;
+  const demo = Number.isInteger(opts.demo);
+  const c = demo ? opts.demo : correctCount();
+  const effect = opts.effect === undefined ? FINAL_EFFECT : opts.effect;
   const pct = Math.round((c / total) * 100);
   const tier = TIERS.find(t => c >= t.min).label;
   const r = 70, circ = 2 * Math.PI * r, dash = circ * (c / total);
-  screen = { kind: "result" };
+  screen = demo ? { kind: "start" } : { kind: "result" };
   app.innerHTML = "";
   const card = el(`
     <section class="card score">
@@ -346,13 +468,25 @@ function renderResult() {
       <h1>You are ${pct}% Ukrainian</h1>
       <p class="count">${c} of ${total} correct</p>
       <p class="tier">${tier}</p>
-      <button class="btn" id="again">Start over</button>
-      <button class="btn secondary" id="review">Review my answers</button>
+      ${demo
+        ? `<div class="row demo" id="demo"></div><button class="btn secondary" id="again" style="margin-top:14px">Back to endings</button>`
+        : `<button class="btn" id="again">Start over</button><button class="btn secondary" id="review">Review my answers</button>`}
     </section>`);
-  card.querySelector("#again").addEventListener("click", reset);
-  card.querySelector("#review").addEventListener("click", () => renderQuestion(0));
+  if (demo) {
+    const row = card.querySelector("#demo");
+    [19, 15, 10, 4].forEach(n => {
+      const b = el(`<button class="chip${n === c ? " on" : ""}" type="button">${n} / ${total}</button>`);
+      b.addEventListener("click", () => renderResult({ effect, demo: n }));
+      row.appendChild(b);
+    });
+    card.querySelector("#again").addEventListener("click", renderStart);
+  } else {
+    card.querySelector("#again").addEventListener("click", reset);
+    card.querySelector("#review").addEventListener("click", () => renderQuestion(0));
+  }
   app.appendChild(card);
   window.scrollTo({ top: 0 });
+  if (effect && EFFECTS[effect]) EFFECTS[effect](card, c, total);
 }
 
 function boot(data) {
