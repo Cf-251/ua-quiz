@@ -8,6 +8,5 @@ Live at **https://cf-251.github.io/ua-quiz/** (GitHub Pages, branch `master`, re
 - One question at a time. An answer locks when tapped and shows whether it was right, with the correct answer and a short explanation. Earlier answers can be viewed but not changed.
 - The result screen shows the score in percent, the number of correct answers, a verdict line, confetti, a review of all answers, and a Start over button.
 - Edit the `QUESTIONS` array in `index.html` to change questions, `TIERS` for the verdict lines. Push to `master` and the page updates within a minute.
-- `old-button-demo/` holds the 2017 button-hover demo that used to be this account's front page, kept for the record.
 
 Style note: "russia" and "russians" are written in lowercase on purpose.
