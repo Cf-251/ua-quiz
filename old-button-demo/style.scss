@@ -1,0 +1,225 @@
+// General Styles
+html {
+  font-family: "Source Sans Pro", arial, sans-serif;
+  color: #2d2d2d;
+  background: #fffbf5;
+  font-weight: 300;
+}
+
+// Resolutions
+$screen-xs-min: 480px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+$column-count: 12;
+$column-width: 70px;
+$gutter-width: 30px;
+
+$container-xs: 300px;
+$container-sm: 720px + $gutter-width;
+$container-md: 940px + $gutter-width;
+$container-lg: $column-count*$column-width + $gutter-width*($column-count);
+
+@mixin make-container($gutter: 30px) {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: ($gutter / 2);
+  padding-right: ($gutter / 2);
+}
+
+.container {
+  @include make-container($gutter-width);
+  min-width: $container-xs;
+  max-width: $screen-xs-min;
+
+  @media (min-width: $screen-sm-min) {
+    max-width: $container-sm;
+  }
+  @media (min-width: $screen-md-min) {
+    max-width: $container-md;
+  }
+  @media (min-width: $screen-lg-min) {
+    max-width: $container-lg;
+  }
+}
+
+
+h2 {
+  font-size: 25px;
+  font-weight: 400;
+  @media (min-width: $screen-md-min) {
+    font-size: 30px;
+  }
+  @media (min-width: $screen-lg-min) {
+    font-size: 40px;
+  }
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: 400;
+  @media (min-width: $screen-lg-min) {
+    font-size: 28px;
+  }
+}
+
+p {
+  font-size: 18px;
+}
+
+a {
+  transition: .3s all ease;
+}
+
+em {
+  font-style: italic;
+  font-size: 18px;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.small {
+  font-size: 16px;
+}
+
+pre {
+  padding: 20px;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+ol {
+  li {
+    font-size: 22px;
+    font-weight: 300;
+    @media (min-width: $screen-lg-min) {
+      font-size: 28px;
+    }
+  }
+}
+
+code {
+  display: inline;
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 2px;
+  white-space: nowrap;
+  word-wrap: break-word;
+  font-size: 18px;
+}
+
+// Button General Styles
+.btn {
+  display: inline-block;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  transition: .5s all ease;
+  font-weight: 400;
+}
+
+// Button Layout Styles
+.btn-sm {
+  padding: 10px 30px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+// Button #2 hover effect
+.btn-hover-2 {
+  color: #2d2d2d;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+
+  &:before, &:after,
+  span:before,
+  span:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 25%;
+    height: 0%;
+    background: #8c1220;
+    transition: 0.3s;
+    z-index: -1;
+  }
+
+  &:before {
+    left: 0;
+  }
+
+  &:after {
+    left: 50%;
+  }
+
+  span {
+    &:before, &:after {
+      top: auto;
+      bottom: 0;
+    }
+
+    &:before {
+      left: 25%;
+    }
+
+    &:after {
+      left: 75%;
+    }
+  }
+
+  &:hover {
+    color: #fff;
+    background: transparent;
+    border-color: #8c1220;
+    &:before, &:after,
+    span:before, span:after {
+      height: 100%;
+    }
+  }
+}
+
+// Main Layout
+
+h2 + * {
+  margin-top: 30px;
+}
+
+h3 + * {
+  margin-top: 30px;
+}
+
+p + * {
+  margin-top: 30px;
+}
+
+* + p {
+  margin-top: 30px;
+}
+
+em + * {
+  margin-top: 30px;
+}
+
+.inset-1 {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.btn + .btn {
+  margin-left: 30px;
+}
+
+.text-center {
+  text-align: center;
+}
+

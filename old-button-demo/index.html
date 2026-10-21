@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vivid button hover effects</title>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,200italic,300italic,400italic,600,600italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<section class="inset-1">
+    <div class="container">
+        <h2>Vivid button hover effects</h2>
+        <h3>Looking for some bright button hover effects? Then you're on the right track. In this tutorial we'll discover how three different button hover effects work. They'll definitely make your website more stylish and fresh-looking.</h3>
+        <p>We'll go through the process of creating three  buttons, starting with markup and ending with their usage and customization. You can try to hover the buttons below in Codepen demo to see what we are going to talk about.</p>
+        <p data-height="275" data-theme-id="0" data-slug-hash="vGwmge" data-default-tab="result" data-user="CF-251" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/CF-251/pen/vGwmge/">Vivid button hover effects</a> by Helen (<a href="http://codepen.io/CF-251">@CF-251</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+        <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+        <p>So let's start from the initial set-up:</p>
+
+        <pre style="background:#404040;color:#f8f8f8"><span style="color:#89bdff">&lt;!<span style="color:#89bdff"><span style="color:#89bdff">DOCTYPE</span> html</span>></span>
+<span style="color:#89bdff">&lt;<span style="color:#89bdff">html</span> <span style="color:#89bdff">lang</span>=<span style="color:#65b042">"en"</span>></span>
+
+<span style="color:#89bdff">&lt;<span style="color:#89bdff">head</span>></span>
+    <span style="color:#e0c589">&lt;<span style="color:#e0c589">meta</span> <span style="color:#e0c589">charset</span>=<span style="color:#65b042">"UTF-8"</span>></span>
+    <span style="color:#e0c589">&lt;<span style="color:#e0c589">title</span>></span>Buttons<span style="color:#e0c589">&lt;/<span style="color:#e0c589">title</span>></span>
+    <span style="color:#e0c589">&lt;<span style="color:#e0c589">link</span> <span style="color:#e0c589">rel</span>=<span style="color:#65b042">"stylesheet"</span> <span style="color:#e0c589">href</span>=<span style="color:#65b042">"button-styles.css"</span>></span>
+<span style="color:#89bdff">&lt;/<span style="color:#89bdff">head</span>></span>
+<span style="color:#89bdff">&lt;<span style="color:#89bdff">body</span>></span>
+
+<span style="color:#89bdff">&lt;<span style="color:#89bdff">section</span>></span>
+    <span style="color:#89bdff">&lt;<span style="color:#89bdff">div</span> <span style="color:#89bdff">class</span>=<span style="color:#65b042">"wrap"</span>></span>
+        <span style="color:#e0c589">&lt;<span style="color:#e0c589">a</span> <span style="color:#e0c589">href</span>=<span style="color:#65b042">"#"</span> <span style="color:#e0c589">class</span>=<span style="color:#65b042">"btn btn-md btn-hover-1"</span>></span>Button<span style="color:#e0c589">&lt;/<span style="color:#e0c589">a</span>></span>
+        <span style="color:#e0c589">&lt;<span style="color:#e0c589">a</span> <span style="color:#e0c589">href</span>=<span style="color:#65b042">"#"</span> <span style="color:#e0c589">class</span>=<span style="color:#65b042">"btn btn-md btn-hover-2"</span>></span><span style="color:#e0c589">&lt;<span style="color:#e0c589">span</span>></span>Button<span style="color:#e0c589">&lt;/<span style="color:#e0c589">span</span>></span><span style="color:#e0c589">&lt;/<span style="color:#e0c589">a</span>></span>
+        <span style="color:#e0c589">&lt;<span style="color:#e0c589">a</span> <span style="color:#e0c589">href</span>=<span style="color:#65b042">"#"</span> <span style="color:#e0c589">class</span>=<span style="color:#65b042">"btn btn-md btn-hover-3"</span>></span><span style="color:#e0c589">&lt;<span style="color:#e0c589">span</span>></span>Button<span style="color:#e0c589">&lt;/<span style="color:#e0c589">span</span>></span><span style="color:#e0c589">&lt;/<span style="color:#e0c589">a</span>></span>
+    <span style="color:#89bdff">&lt;/<span style="color:#89bdff">div</span>></span>
+<span style="color:#89bdff">&lt;/<span style="color:#89bdff">section</span>></span>
+
+<span style="color:#89bdff">&lt;/<span style="color:#89bdff">body</span>></span>
+<span style="color:#89bdff">&lt;/<span style="color:#89bdff">html</span>></span>
+</pre>
+        <p>You should note that text in two last buttons is placed into <code>span</code> element to make hover effect work properly.<br>
+            Now let's apply some general styles and sizing to buttons.</p>
+
+        <pre style="background:#404040;color:#f8f8f8">// Button General Styles
+<span style="color:#9b703f">.btn</span> {
+  <span style="color:#c5af75">display</span>: <span style="color:#f9ee98">inline-block</span>;
+  <span style="color:#c5af75">text-align</span>: <span style="color:#f9ee98">center</span>;
+  <span style="color:#c5af75">border-radius</span>: <span style="color:#dd7b3b">3<span style="color:#e28964">px</span></span>;
+  <span style="color:#c5af75">border</span>: <span style="color:#dd7b3b">1<span style="color:#e28964">px</span></span> <span style="color:#f9ee98">solid</span>;
+  <span style="color:#c5af75">cursor</span>: <span style="color:#f9ee98">pointer</span>;
+  <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">relative</span>;
+  <span style="color:#c5af75">text-decoration</span>: <span style="color:#f9ee98">none</span>;
+  transition: <span style="color:#dd7b3b">.5<span style="color:#e28964">s</span></span> <span style="color:#f9ee98">all</span> ease;
+}
+
+// Button Layout Styles
+<span style="color:#9b703f">.btn-md</span> {
+  <span style="color:#c5af75">padding</span>: <span style="color:#dd7b3b">20<span style="color:#e28964">px</span></span> <span style="color:#dd7b3b">50<span style="color:#e28964">px</span></span>;
+  <span style="color:#c5af75">font-size</span>: <span style="color:#dd7b3b">20<span style="color:#e28964">px</span></span>;
+  <span style="color:#c5af75">line-height</span>: <span style="color:#dd7b3b">1.2</span>;
+}
+</pre>
+
+        <ol>
+            <li> <h3>Button #1 hover effect</h3>
+                <p>First hover effect is based on using <code>:before</code> and <code>:after</code> pseudo-elements, which are set in bottom left and right corners and have no width and height, they are made by using border properties. The width of borders grows to <span class="text-bold">200 px</span> while hovering and they form the triangles overlapping each other. </p>
+                <em>Keep im mind that if your button becomes bigger (for example the button text is longer), the border-width value should also be increased.</em>
+        <pre style="background:#404040;color:#f8f8f8">// Button Layout Styles
+<span style="color:#9b703f">.btn-md</span> {
+  <span style="color:#c5af75">padding</span>: <span style="color:#dd7b3b">20<span style="color:#e28964">px</span></span> <span style="color:#dd7b3b">50<span style="color:#e28964">px</span></span>;
+  <span style="color:#c5af75">font-size</span>: <span style="color:#dd7b3b">20<span style="color:#e28964">px</span></span>;
+  <span style="color:#c5af75">line-height</span>: <span style="color:#dd7b3b">1.2</span>;
+}
+
+// Button #1 hover effect
+<span style="color:#9b703f">.btn-hover-1</span> {
+  <span style="color:#c5af75">color</span>: <span style="color:#dd7b3b">#fff</span>;
+  <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">relative</span>;
+  <span style="color:#c5af75">overflow</span>: <span style="color:#f9ee98">hidden</span>;
+  transition: <span style="color:#dd7b3b">0.5<span style="color:#e28964">s</span></span>;
+
+  &amp;:before,
+  &amp;:after {
+    content: <span style="color:#65b042">''</span>;
+    <span style="color:#c5af75">width</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">height</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">border</span>: <span style="color:#dd7b3b">0</span> <span style="color:#f9ee98">solid</span>;
+    <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">absolute</span>;
+    transition: <span style="color:#dd7b3b">0.5<span style="color:#e28964">s</span></span>;
+    <span style="color:#c5af75">z-index</span>: <span style="color:#dd7b3b">-1</span>;
+  }
+
+  &amp;<span style="color:#89bdff">:before</span> {
+    <span style="color:#c5af75">border-color</span>: <span style="color:#f9ee98">transparent</span> <span style="color:#f9ee98">transparent</span> <span style="color:#f9ee98">transparent</span> <span style="color:#dd7b3b">#ace2e0</span>;
+    <span style="color:#c5af75">bottom</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">0</span>;
+  }
+
+  &amp;<span style="color:#89bdff">:after</span> {
+    <span style="color:#c5af75">border-color</span>: <span style="color:#f9ee98">transparent</span> <span style="color:#f9ee98">transparent</span> <span style="color:#dd7b3b">#ace2e0</span> <span style="color:#f9ee98">transparent</span>;
+    <span style="color:#c5af75">right</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">bottom</span>: <span style="color:#dd7b3b">0</span>;
+  }
+
+  &amp;<span style="color:#89bdff">:hover</span> {
+    <span style="color:#c5af75">color</span>: <span style="color:#dd7b3b">#3B3C40</span>;
+    <span style="color:#c5af75">border-color</span>: <span style="color:#dd7b3b">#ace2e0</span>;
+
+    &amp;:before {
+      border-width: <span style="color:#dd7b3b">200<span style="color:#e28964">px</span></span> <span style="color:#dd7b3b">0</span> <span style="color:#dd7b3b">0</span> <span style="color:#dd7b3b">200<span style="color:#e28964">px</span></span>;
+    }
+
+    &amp;<span style="color:#89bdff">:after</span> {
+      <span style="color:#c5af75">border-width</span>: <span style="color:#dd7b3b">0</span> <span style="color:#dd7b3b">0</span> <span style="color:#dd7b3b">200<span style="color:#e28964">px</span></span> <span style="color:#dd7b3b">200<span style="color:#e28964">px</span></span>;
+    }
+  }
+}
+</pre>
+            </li>
+
+            <li><h3>Button #2 hover effect</h3>
+                <p>In this hover effect we use pseudo-elements not only for button itself, but for the span element which is inside, too. Each of them creates a block with <span class="small text-bold">1/4</span> width of the button and zero height, which grows to <span class="small text-bold">100%</span> on hover.</p>
+<pre style="background:#404040;color:#f8f8f8">// Button #2 hover effect
+<span style="color:#9b703f">.btn-hover-2</span> {
+  <span style="color:#c5af75">color</span>: <span style="color:#dd7b3b">#fff</span>;
+  <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">relative</span>;
+  <span style="color:#c5af75">overflow</span>: <span style="color:#f9ee98">hidden</span>;
+  transition: <span style="color:#dd7b3b">0.3<span style="color:#e28964">s</span></span>;
+
+  &amp;:before, &amp;:after,
+  span:before,
+  span:after {
+    content: <span style="color:#65b042">''</span>;
+    <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">absolute</span>;
+    <span style="color:#c5af75">top</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">width</span>: <span style="color:#dd7b3b">25<span style="color:#e28964">%</span></span>;
+    <span style="color:#c5af75">height</span>: <span style="color:#dd7b3b">0<span style="color:#e28964">%</span></span>;
+    <span style="color:#c5af75">background</span>: <span style="color:#dd7b3b">#8c1220</span>;
+    transition: <span style="color:#dd7b3b">0.3<span style="color:#e28964">s</span></span>;
+    <span style="color:#c5af75">z-index</span>: <span style="color:#dd7b3b">-1</span>;
+  }
+
+  &amp;<span style="color:#89bdff">:before</span> {
+    <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">0</span>;
+  }
+
+  &amp;<span style="color:#89bdff">:after</span> {
+    <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">50<span style="color:#e28964">%</span></span>;
+  }
+
+  <span style="color:#cda869">span</span> {
+    &amp;:before, &amp;:after {
+      <span style="color:#f9ee98">top</span>: <span style="color:#f9ee98">auto</span>;
+      <span style="color:#c5af75">bottom</span>: <span style="color:#dd7b3b">0</span>;
+    }
+
+    &amp;<span style="color:#89bdff">:before</span> {
+      <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">25<span style="color:#e28964">%</span></span>;
+    }
+
+    &amp;<span style="color:#89bdff">:after</span> {
+      <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">75<span style="color:#e28964">%</span></span>;
+    }
+  }
+
+  &amp;<span style="color:#89bdff">:hover</span> {
+    <span style="color:#c5af75">border-color</span>: <span style="color:#dd7b3b">#8c1220</span>;
+    &amp;:before, &amp;:after,
+    span:before, span:after {
+      height: <span style="color:#dd7b3b">100<span style="color:#e28964">%</span></span>;
+    }
+  }
+}
+</pre>
+<p>Pretty simple, right? Let's go further.</p>
+            </li>
+
+            <li><h3>Button #3 hover effect</h3>
+                <p>The same principle is used in the third hover effect - four pseudo-elements cover the button increasing their height on hover. But the most interesting goes next. We use <span class="small text-bold">0.5</span> transparency value on the background to get this semi-transparent effect when first two pseudo-elements overlay the button. After the transition-delay within <span class="small text-bold">0.4s</span> another two elements (<code>span:before</code> and <code>span:after</code>) do the same thing and it looks like they completely fill the button background.</p>
+
+<pre style="background:#404040;color:#f8f8f8">// Button #3 hover effect
+<span style="color:#9b703f">.btn-hover-3</span> {
+  <span style="color:#c5af75">color</span>: <span style="color:#dd7b3b">#fff</span>;
+  <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">relative</span>;
+  <span style="color:#c5af75">overflow</span>: <span style="color:#f9ee98">hidden</span>;
+  transition: <span style="color:#dd7b3b">0.5<span style="color:#e28964">s</span></span>;
+
+  &amp;:before,
+  &amp;:after,
+  span:before,
+  span:after {
+    content: <span style="color:#65b042">''</span>;
+    <span style="color:#c5af75">background</span>: <span style="color:#dad085">rgba</span>(<span style="color:#dd7b3b">221, 213, 146, 0.4</span>);
+    <span style="color:#c5af75">position</span>: <span style="color:#f9ee98">absolute</span>;
+    <span style="color:#c5af75">top</span>: <span style="color:#dd7b3b">0</span>;
+    <span style="color:#c5af75">left</span>: <span style="color:#dd7b3b">0</span>;
+    transition: <span style="color:#dd7b3b">0.4<span style="color:#e28964">s</span></span>;
+    <span style="color:#c5af75">z-index</span>: <span style="color:#dd7b3b">-1</span>;
+    <span style="color:#c5af75">width</span>: <span style="color:#dd7b3b">100<span style="color:#e28964">%</span></span>;
+    <span style="color:#c5af75">height</span>: <span style="color:#dd7b3b">0<span style="color:#e28964">%</span></span>;
+  }
+
+  &amp;<span style="color:#89bdff">:after</span>,
+  <span style="color:#cda869">span</span><span style="color:#89bdff">:before</span> {
+    <span style="color:#c5af75">top</span>: <span style="color:#f9ee98">auto</span>;
+    <span style="color:#c5af75">bottom</span>: <span style="color:#dd7b3b">0</span>;
+  }
+
+  <span style="color:#cda869">span</span><span style="color:#89bdff">:before</span>,
+  <span style="color:#cda869">span</span><span style="color:#89bdff">:after</span> {
+    transition-delay: <span style="color:#dd7b3b">0.4<span style="color:#e28964">s</span></span>;
+  }
+
+  &amp;<span style="color:#89bdff">:hover</span> {
+    <span style="color:#c5af75">color</span>: <span style="color:#dd7b3b">#222</span>;
+    <span style="color:#c5af75">border-color</span>: <span style="color:#dd7b3b">#ddd592</span>;
+    span:before,
+    span:after,
+    &amp;:before,
+    &amp;:after {
+      height: <span style="color:#dd7b3b">100<span style="color:#e28964">%</span></span>;
+    }
+  }
+}
+</pre>
+
+            </li>
+        </ol>
+        
+        <p>Below you can open the demo page or download the source file.</p>
+        <div class="text-center">
+            <a target="_blank" class="btn btn-sm btn-hover-2" href="buttons.html"><span>Demo</span></a>
+            <a class="btn btn-sm btn-hover-2" href="buttons.zip"><span>Source</span></a>
+        </div>
+        
+
+
+        <p>You've probably noticed that the value of height property (in buttons #2 and #3) has the '<span class="small text-bold">%</span>' symbol, which is not compulsory. It's applied to make the hover work properly in IE, so now all of these button effects have a cross-browser compatibility.</p>
+
+        <p>By the way the styles are quite easy to customize. You can change, for example, horizontal overlap in the last button to vertical changing the initial position of pseudo-elements and their width.</p>
+
+        <p>I hope you liked this tutorial and will be glad to get your feedback on it. If you have any questions or suggestions feel free to contact me.</p>
+
+    </div>
+</section>
+
+
+</body>
+</html>
