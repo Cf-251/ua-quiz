@@ -4,7 +4,7 @@ A 20-question quiz about Ukraine, made for Gro Community's Ukrainian afterwork i
 
 The quiz is `index.html`, a single file. Open it in any browser.
 
-The live copy is published at https://cf-251.github.io/ukraine-quiz/ from the `ukraine-quiz/` folder of the `Cf-251.github.io` repository. To deploy a change, copy `index.html` there and push.
+The live copy is published at https://cf-251.github.io/ua-quiz/ from the `ua-quiz/` folder of the `Cf-251.github.io` repository. To deploy a change, copy `index.html` there and push.
 
 - One question at a time. An answer locks when tapped and shows whether it was right, with the correct answer and a short explanation.
 - The result screen shows the score in percent, the number of correct answers, and a Start over button.
