@@ -7,6 +7,6 @@ Live at **https://cf-251.github.io/ua-quiz/** (GitHub Pages, branch `master`, re
 - `index.html` is the whole quiz: one file, no dependencies, no tracking, nothing stored except the light/dark choice on the viewer's own device.
 - One question at a time. An answer locks when tapped and shows whether it was right, with the correct answer and a short explanation. Earlier answers can be viewed but not changed.
 - The result screen shows the score in percent, the number of correct answers, a verdict line, confetti, a review of all answers, and a Start over button.
-- Edit the `QUESTIONS` array in `index.html` to change questions, `TIERS` for the verdict lines. Push to `master` and the page updates within a minute.
+- Three languages, switchable at the top: English, Swedish and Ukrainian. All text lives in the `I18N` object in `index.html`, one block per language with `ui`, `tiers` and `questions`. The correct answer for each question is its position in `ANSWERS`, shared by all languages, so keep option order identical when editing. Push to `master` and the page updates within a minute.
 
 Style note: "russia" and "russians" are written in lowercase on purpose.
